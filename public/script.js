@@ -4,17 +4,22 @@ var ctx = c.getContext("2d");
 var x = 0;
 var y = 0;
 var size = 100;
-var keys = { Escape: false };
+var keys = {
+  Escape: false,
+};
 
 const cx = 925;
 const cy = 375;
 
-const num = 100;
+const num = 20;
 var pnum = 5;
 
 var puntuacion = 0;
 var level = 0;
 
+var life = 50;
+
+// ==================== USER IMPUT ====================
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     keys[event.key] = keys[event.key] ? false : true;
@@ -31,23 +36,24 @@ document.addEventListener("keyup", (event) => {
 });
 
 /*
-var map = new Array(size * size);
+  var map = new Array(size * size);
 
-for (var i = 0; i < size; i++) {
-  for (var j = 0; j < size; j++) {
-    map[j + j * i] = getRandomColor();
-  }
-}
-
-var mapGeneration = () => {
   for (var i = 0; i < size; i++) {
     for (var j = 0; j < size; j++) {
-      ctx.fillStyle = map[j + j * i];
-      ctx.fillRect(x + 50 * i, y + 50 * j - 50, 50, 50);
+      map[j + j * i] = getRandomColor();
     }
   }
-};
+
+  var mapGeneration = () => {
+    for (var i = 0; i < size; i++) {
+      for (var j = 0; j < size; j++) {
+        ctx.fillStyle = map[j + j * i];
+        ctx.fillRect(x + 50 * i, y + 50 * j - 50, 50, 50);
+      }
+    }
+  };
 */
+// ==================== MAP RENDERING ====================
 function renderMap() {
   for (var i = 0; i < size; i++) {
     for (var j = 0; j < size; j++) {
@@ -100,6 +106,7 @@ function renderMap() {
   }
 }
 
+// ==================== INITIALIZE IMAGES ====================
 const imgHeart = new Image();
 imgHeart.src = "imgs/heart.png";
 
@@ -132,6 +139,7 @@ a4.src = "imgs/4.png";
 const bubble = new Image();
 bubble.src = "imgs/bubble.png";
 
+// ==================== BUBBLE PROJECTILE ====================
 class Projectile {
   constructor(x, y) {
     this.x = x;
@@ -155,6 +163,7 @@ class Projectile {
   }
 }
 
+// ==================== INITIALIZE BUBLES ====================
 var bullets = new Array(pnum);
 
 for (var i = 0; i < pnum; i++) {
@@ -166,6 +175,7 @@ for (var i = 0; i < pnum; i++) {
   );
 }
 
+// ==================== ENEMY HEART ====================
 class Enemy {
   constructor(x, y) {
     this.x = y;
@@ -176,8 +186,8 @@ class Enemy {
     var n = Math.sqrt(
       (cx - this.x) * (cx - this.x) + (cy - this.y) * (cy - this.y),
     );
-    this.x += 5 * ((cx - this.x) / n);
-    this.y += 5 * ((cy - this.y) / n);
+    this.x += 2 * ((cx - this.x) / n);
+    this.y += 2 * ((cy - this.y) / n);
 
     for (var i = 0; i < pnum; i++) {
       if (
@@ -192,6 +202,18 @@ class Enemy {
         puntuacion += 5;
       }
     }
+
+    if (
+      cx - 100 < this.x &&
+      this.x < cx + 100 &&
+      cy - 100 < this.y &&
+      this.y < cy + 100
+    ) {
+      var ang = (Math.floor(Math.random() * 360) * Math.PI) / 180;
+      this.x = Math.cos(ang) * 1000 + cx;
+      this.y = Math.sin(ang) * 1000 + cy;
+      life -= 1;
+    }
   }
 
   move(x, y) {
@@ -200,18 +222,21 @@ class Enemy {
   }
 
   render() {
-    //var rot = Math.floor(Math.random() * 360)*Math.PI/180;
     ctx.drawImage(imgHeart, this.x - 40, this.y - 40, 80, 80);
   }
 }
 
+// ==================== INITIALIZE ENEMYS ====================
 var enemies = new Array(num);
 
 for (var i = 0; i < num; i++) {
-  enemies[i] = new Enemy(0, 0);
+  var ang = (Math.floor(Math.random() * 360) * Math.PI) / 180;
+  var x = Math.cos(ang) * 1000 + cy;
+  var y = Math.sin(ang) * 1000 + cx;
+  enemies[i] = new Enemy(x, y);
 }
 
-var speed = 15;
+var speed = 20;
 
 function enemiesMove(x, y) {
   for (var i = 0; i < num; i++) {
@@ -219,6 +244,7 @@ function enemiesMove(x, y) {
   }
 }
 
+// ==================== MAIN UPDATE FUNCTION ====================
 const update = () => {
   if (keys["a"] || keys["A"]) {
     x += speed;
@@ -249,13 +275,15 @@ const update = () => {
   x = Math.max(-3000, Math.min(x, 0));
   y = Math.max(-3000, Math.min(y, 0));
 
-  if (
-    Math.floor(puntuacion / 100) > 5 &&
-    Math.floor(puntuacion / 100) != pnum
-  ) {
+  if (Math.floor(puntuacion / 1000) > level) {
+    level += 1;
+    keys["Escape"] = false;
+
     pnum = Math.floor(puntuacion / 100);
 
-    bullets.push(new Projectile(0, 0));
+    for (var i = 0; i < 10; i++) {
+      bullets.push(new Projectile(0, 0));
+    }
 
     for (var i = 0; i < pnum; i++) {
       var ang = ((360 / pnum) * i * Math.PI) / 180;
@@ -263,13 +291,15 @@ const update = () => {
       bullets[i].move(Math.cos(ang) * 300 + cx, Math.sin(ang) * 300 + cy);
     }
   }
-
-  if (Math.floor(puntuacion / 500) > level) {
-    level += 1;
+  //601 588 52 04
+  if (life <= 0) {
+    puntuacion = 0;
+    life = 50;
     keys["Escape"] = false;
   }
 };
 
+// ==================== MAIN RENDER FUNCTION ====================
 const render = () => {
   renderMap();
 
@@ -287,8 +317,18 @@ const render = () => {
   ctx.fillStyle = "white";
   ctx.textAlign = "center";
   ctx.fillText(puntuacion, cx, 100);
+  ctx.fillStyle = "red";
+  ctx.textAlign = "left";
+  ctx.fillText(life, 100, 100);
+  ctx.drawImage(imgHeart, 10, 20, 80, 80);
+
+  if (!keys["Escape"]) {
+    ctx.fillStyle = "rgb(0 0 0 / 25%)";
+    ctx.fillRect(0, 0, c.width, c.height);
+  }
 };
 
+// ==================== MAIN GAME FUNCTION ====================
 var gameLoop = () => {
   if (keys["Escape"]) {
     update();
