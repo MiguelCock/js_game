@@ -1,17 +1,37 @@
+// <uniquifier>: Use a unique and descriptive class name
+// <weight>: Use a value from 400 to 700
+.edu-au-vic-wa-nt-hand-<uniquifier> {
+    font-family: "Edu AU VIC WA NT Hand", cursive;
+    font-optical-sizing: auto;
+    font-weight: <weight>;
+    font-style: normal;
+}
+
 @font-face {
     font-family: "pulp";
     src: url("https://db.onlinewebfonts.com/t/dab0cc5cf1a63e08c37c2c2c37ef64d2.eot");
-    src: url("https://db.onlinewebfonts.com/t/dab0cc5cf1a63e08c37c2c2c37ef64d2.eot?#iefix")format("embedded-opentype"),
-    url("https://db.onlinewebfonts.com/t/dab0cc5cf1a63e08c37c2c2c37ef64d2.woff2")format("woff2"),
-    url("https://db.onlinewebfonts.com/t/dab0cc5cf1a63e08c37c2c2c37ef64d2.woff")format("woff"),
-    url("https://db.onlinewebfonts.com/t/dab0cc5cf1a63e08c37c2c2c37ef64d2.ttf")format("truetype"),
-    url("https://db.onlinewebfonts.com/t/dab0cc5cf1a63e08c37c2c2c37ef64d2.svg#Aachen W02 Bold")format("svg");
+    src: url("https://db.onlinewebfonts.com/t/dab0cc5cf1a63e08c37c2c2c37ef64d2.eot?#iefix") format("embedded-opentype"), url("https://db.onlinewebfonts.com/t/dab0cc5cf1a63e08c37c2c2c37ef64d2.woff2") format("woff2"), url("https://db.onlinewebfonts.com/t/dab0cc5cf1a63e08c37c2c2c37ef64d2.woff") format("woff"), url("https://db.onlinewebfonts.com/t/dab0cc5cf1a63e08c37c2c2c37ef64d2.ttf") format("truetype"), url("https://db.onlinewebfonts.com/t/dab0cc5cf1a63e08c37c2c2c37ef64d2.svg#Aachen W02 Bold") format("svg");
 }
+
 body {
     font-family: Arial, sans-serif;
-    background-color: #503D42;
+    background-color: #6d3c53;
     margin: 0;
     padding: 20px;
+}
+
+div div {
+    font-family: Edu AU VIC WA NT Hand;
+    font-size: 20px;
+    color: rgb(255, 217, 0);
+    text-shadow: #421d3d 0px 4px;
+    margin: 5%;
+    font-weight: 700;
+}
+
+.lyrick {
+    width: 24.7%;
+    display: inline-block;
 }
 
 h1 {
@@ -24,6 +44,6 @@ h1 {
 }
 
 .spotify {
-    height: 200px;
+    height: 352px;
     width: 24.7%;
 }
