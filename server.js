@@ -6,7 +6,7 @@ const hostname = '127.0.0.1';
 const port = 3000;
 
 const server = http.createServer((req, res) => {
-  let filePath = path.join(__dirname, 'public', req.url === '/' ? 'index.html' : req.url);
+  let filePath = path.join(__dirname, './', req.url === '/' ? 'index.html' : req.url);
   let extname = String(path.extname(filePath)).toLowerCase();
   let mimeTypes = {
     '.html': 'text/html',
