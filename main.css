@@ -1,5 +1,5 @@
-// <uniquifier>: Use a unique and descriptive class name
-// <weight>: Use a value from 400 to 700
+/* <uniquifier>: Use a unique and descriptive class name */
+/* <weight>: Use a value from 400 to 700 */
 .edu-au-vic-wa-nt-hand-<uniquifier> {
     font-family: "Edu AU VIC WA NT Hand", cursive;
     font-optical-sizing: auto;
